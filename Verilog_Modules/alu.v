@@ -15,16 +15,14 @@
 `ifndef _alu
 `define _alu
 
-module alu(
+module alu #(parameter SIZE = 10)(
 		input		[2:0]	ctl,
 		input		[SIZE:0]	in1, in2,
 		output reg	[SIZE:0]	out,
 		output				zero);
 
-parameter SIZE = 9;
-
-	wire [SIZE:0] sub_ab;
-	wire [SIZE:0] add_ab;
+	wire [SIZE-1:0] sub_ab;
+	wire [SIZE-1:0] add_ab;
 	wire 		oflow_add;
 	wire 		oflow_sub;
 	wire 		oflow;
@@ -39,13 +37,13 @@ parameter SIZE = 9;
 	// the operands have the same sign, but the sign of the result is
 	// different.  The actual sign is the opposite of the result.
 	// It is also dependent on wheter addition or subtraction is performed.
-	assign oflow_add = (in1[SIZE] == in2[SIZE] && add_ab[SIZE] != in1[SIZE]) ? 1 : 0;
-	assign oflow_sub = (in1[SIZE] == in2[SIZE] && sub_ab[SIZE] != in1[SIZE]) ? 1 : 0;
+	assign oflow_add = (in1[SIZE-1] == in2[SIZE-1] && add_ab[SIZE-1] != in1[SIZE-1]) ? 1 : 0;
+	assign oflow_sub = (in1[SIZE-1] == in2[SIZE-1] && sub_ab[SIZE-1] != in1[SIZE-1]) ? 1 : 0;
 
 	assign oflow = (ctl == 4'b0010) ? oflow_add : oflow_sub;
 
 	// set if less than, 2s compliment 32-bit numbers
-	assign slt = oflow_sub ? ~(in1[SIZE]) : in1[SIZE];
+	assign slt = oflow_sub ? ~(in1[SIZE-1]) : in1[SIZE-1];
 
 	always @(*) begin
 		case (ctl)

@@ -8,6 +8,9 @@
 \usepackage{ucs}
 \usepackage{amsmath}      % Los paquetes ams son desarrollados por la American Mathematical Society
 \usepackage{amsfonts}     % y mejoran la escritura de f\' ormulas y s\' imbolos matem\' aticos.
+\usepackage{tabularx}	% adjust the textwidth of the tables
+\usepackage{longtable} % Divide one table in multiple pages
+\usepackage{ltablex}
 \usepackage{amssymb}
 \usepackage{graphicx}     % Para insertar gr\' aficas
 \usepackage[lofdepth,lotdepth]{subfig}	% Para colocar varias figuras
@@ -24,6 +27,11 @@
 \pagenumbering{arabic}
 \usepackage{lastpage}
 \usepackage{fancyhdr}	% Para manejar los encabezados y pies de p\' agina
+
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+
+
 \pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
 \newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
 \newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
@@ -38,7 +46,7 @@
 
 
 \author{Natalia Araya Campos, B00448 \\ JeanCarlos Chavarr\' ia Hughes, B11814 \\  Alejandro Masís Castillo, B13960\\ {\small Grupo 01}\\ Profesor: Erick Carvajal  \vspace*{3.0in}}
-\title{Universidad de Costa Rica\\{\small Facultad de Ingenier\' ia\\Escuela de Ingenier\' ia El\' ectrica\\IE0521 – Estructuras de Computadoras II\\I ciclo 2015\\\vspace*{0.55in} Reporte 1}\\ Laboratorio 1: Multiplicador RTL \vspace*{1.35in}}
+\title{Universidad de Costa Rica\\{\small Facultad de Ingenier\' ia\\Escuela de Ingenier\' ia El\' ectrica\\IE0521 – Estructuras de Computadoras II\\I ciclo 2015\\\vspace*{0.55in} Reporte 4}\\ Laboratorio 4: Procesador segmentado con \textit{pipelining} \vspace*{1.35in}}
 %\date{}  				
 
 %%%%%%%%%%%%%%%%
@@ -59,6 +67,17 @@
 \include{Introduccion}
 \include{ManejoProyecto}
 \include{Diseno}
+
+%La figura \ref{fig:DiagramaInicial}
+
+%\begin{figure}[H]
+%	\centering
+		%\includegraphics[width=\textwidth]{./imagenes/DiagramaInicial}
+%	\caption{Diagrama inicial que ejemplifica el diseño}
+%	\label{fig:DiagramaInicial}
+%\end{figure}
+
+
 \include{EstrategiaPruebas}
 \include{Bibliografia}
 \include{Apendices}

@@ -10,8 +10,8 @@ all:
 	$(CC) $(FLAG) $(OBJS)
 	$(CC) $(FLAG) $(OBJS)
 	$(CC) $(FLAG) $(OBJS)
-	evince $(TARGET)
+	evince $(TARGET) &
 clean:
-	-@rm -rf *.log *.aux *.gz *.dvi *.out *.blg *.bbl *.lot *.lof *.pdf *.toc 2>/dev/null || true
+	-@rm -rf *.log *.aux *.gz *.dvi *.out *.blg *.bbl *.lot *.lof *~ *.toc 2>/dev/null || true
 	clear
 
