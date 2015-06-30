@@ -17,8 +17,9 @@
 
 module alu #(parameter SIZE = 10)(
 		input		[2:0]	ctl,
-		input		[SIZE:0]	in1, in2,
-		output reg	[SIZE:0]	out,
+		input		[SIZE-1:0]	in1, in2,
+		output reg	[SIZE-1:0]	out,
+		output 				carry_out,
 		output				zero);
 
 	wire [SIZE-1:0] sub_ab;
@@ -27,11 +28,17 @@ module alu #(parameter SIZE = 10)(
 	wire 		oflow_sub;
 	wire 		oflow;
 	wire 		slt;
+	wire [SIZE:0]	tmp;
+
+
 
 	assign zero = (0 == out);
+	assign carry_out = tmp[SIZE];
+	assign add_ab = tmp[SIZE-1:0];
 
 	assign sub_ab = in1 - in2;
-	assign add_ab = in1 + in2;
+	//assign add_ab = in1 + in2; //without carry
+	assign tmp = in1 + in2; //with carry
 
 	// overflow occurs (with 2's complement numbers) when
 	// the operands have the same sign, but the sign of the result is

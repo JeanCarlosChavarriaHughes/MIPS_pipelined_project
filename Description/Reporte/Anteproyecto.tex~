@@ -67,8 +67,18 @@
 \include{Introduccion}
 \include{ManejoProyecto}
 \include{Diseno}
+
+%La figura \ref{fig:DiagramaInicial}
+
+%\begin{figure}[H]
+%	\centering
+		%\includegraphics[width=\textwidth]{./imagenes/DiagramaInicial}
+%	\caption{Diagrama inicial que ejemplifica el diseño}
+%	\label{fig:DiagramaInicial}
+%\end{figure}
+
+
 \include{EstrategiaPruebas}
-\include{Evaluacion}
 \include{Bibliografia}
 \include{Apendices}
 

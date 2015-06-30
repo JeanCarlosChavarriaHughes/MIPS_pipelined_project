@@ -113,6 +113,18 @@ ASRA                 & 27              & \multicolumn{1}{l|}{6}                 
 
 
 \subsection{Etapa de Almacenamiento en Memoria (MEM)}
+La etapa de MEM es en la cual se realiza la escritura de datos en la memoria principal de datos, se puede observar que cuando se ocupa realizar una instruccion de escribir desde los registros hasta la memoria, los datos se almacena en el registro EX/MEM, luego para el siguiente ciclo de reloj, los datos se transportan hacia la memoria. 
+
+De igual manera la direcci\' on de memoria calculada por la ALU se almacena en el registro EX/MEM y se ingresa a la memoria principal para el siguiente ciclo de reloj. As\' i como tambien cuando toca almacenar resultados de operaciones aritm\' eticas desde la ALU hasta la memoria de datos.
+
+La \' unica ocaci\' on en que la etapa EX/MEM no utiliza la memoria principal es cuando se realiza una instrucci\' on de salto, o cuando se debe almacenar un dato en uno de los registros en lugar de la memoria principal.
+
+
 
 
 \subsection{Etapa de Write Back (WB)}
+La etapa del procesador que se encarga de escribir desde los registros hasta la memoria principal o de la ALU hacia los registros deben pasar por esta etapa por lo tanto cuenta con ciertas sen\~ nales de control como se puede observar en el diagrama arquitect\' onico.
+
+Para esta etapa realmente la duraci\' on del ciclo no esta relacionada con el manejo de la instrucci\' on, sino m\' as bien con la duraci\' on de la memoria principal para las lecturas y escrituras. En este caso  dado que la simualaci\' on es conductual y no presenta retardos de propagaci\' on, no se tiene en cuenta este factor, sin embargo, si es importante hacer la aclaraci\' on de que en un caso real, la mayor parte del tiempo que se encuentre en este ciclo es por acceso de la memoria principal.
+
+

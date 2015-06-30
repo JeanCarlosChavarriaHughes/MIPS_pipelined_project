@@ -7,21 +7,22 @@ module TestBench;
 
 	wire [SIZE:0] in1, in2, out;
 	wire [2:0] ctl;
-	wire zero;
+	wire zero, carry_out;
 
-	alu__Tester Test1(ctl,in1,in2,out,zero);
-	alu alu_1(ctl,in1,in2,out,zero);
+	alu__Tester Test1(ctl,in1,in2,out,carry_out,zero);
+	alu alu_1(ctl,in1,in2,out,carry_out,zero);
 
 endmodule
 
 
 
-module alu__Tester(ctl,in1,in2,out,zero);
+module alu__Tester(ctl,in1,in2,out,carry_out,zero);
 
 	output reg		[2:0]		ctl;
 	output reg		[SIZE:0]	in1; 
 	output reg		[SIZE:0]	in2;
 	input 			[SIZE:0]	out;
+	input						carry_out;
 	input						zero;
 
 	parameter SIZE = 9;
@@ -79,6 +80,14 @@ module alu__Tester(ctl,in1,in2,out,zero);
 				in2 = 10'd256;
 				#2 in1 = 10'd768;
 				in2 = 10'd128;
+
+				#2 ctl = 3'b001;
+				#2 in1 = 10'd512;
+				in2 = 10'd513;
+				#2 in1 = 10'd512;
+				in2 = 10'd512;
+				#2 in1 = 10'd512;
+				in2 = 10'd511;
 
 				#2 $finish;
 		end

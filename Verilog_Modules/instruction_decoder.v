@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "./../Verilog_Modules/Defintions.v"
+`include "./Defintions.v"
 
 module inst_decoder(
 	

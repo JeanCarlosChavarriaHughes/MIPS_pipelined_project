@@ -1,10 +1,13 @@
-#Objects definitions
-OBJS3 = ALU_testbench.v
-EXEC3 = ALU
-VCD3 = alu.vcd
-OUT3 = alu.out
-DEP3 = ./../Verilog_Modules/alu.v
+### Mae yo voy a ocupar la vara que borro de alu_testbench
+# Pura Vida
+###### OBJS2 = ALU_testbench.v
+##### EXEC2 = ALU
+##### VCD2 = alu.vcd
+##### OUT2 = alu.out
+##### DEP2 = ./../Verilog_Modules/alu.v
 
+
+#Objects definitions
 OBJS1 = ALU_Controller_testbench.v
 OBJS2 = inst_decode_testbench.v
 EXEC1 = ALU_Controller
@@ -56,18 +59,6 @@ ALU_Controller_all:
 	$(CC) $(OUT) $(EXEC1) $(OBJS1)
 	$(VVP) $(EXEC1) $(OUT1)
 	$(GTK) $(VCD1)
-
-ALU_debug:
-	$(CC) $(DEBUG) $(WARN) $(VERB) $(OBJS3) 
-
-ALU_compile:
-	$(CC) $(OUT) $(EXEC3) $(OBJS3)
-	$(VVP) $(EXEC3) $(OUT3)
-
-ALU_all:
-	$(CC) $(OUT) $(EXEC3) $(OBJS3)
-	$(VVP) $(EXEC3) $(OUT3)
-	$(GTK) $(VCD3)
 
 Decoder:
 	$(CC) $(OUT) $(EXEC2) $(OBJS2)

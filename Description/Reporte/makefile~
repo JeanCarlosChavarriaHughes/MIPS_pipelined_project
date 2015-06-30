@@ -4,7 +4,7 @@ CC = pdflatex
 
 TARGET = Anteproyecto.pdf
 
-FLAG = -file-line-error #-interaction=batchmode
+FLAG = -file-line-error -interaction=batchmode
 
 all:
 	$(CC) $(FLAG) $(OBJS)
@@ -12,6 +12,6 @@ all:
 	$(CC) $(FLAG) $(OBJS)
 	evince $(TARGET)
 clean:
-	-@rm -rf *.log *.aux *.gz *.dvi *.out *.blg *.bbl *.lot *.lof *.pdf *.toc 2>/dev/null || true
+	-@rm -rf *.log *.aux *.gz *.dvi *.out *.blg *.bbl *.lot *.lof *.toc 2>/dev/null || true
 	clear
 
