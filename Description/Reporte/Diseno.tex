@@ -2,7 +2,9 @@
 %%%%%%%%%%%%%%
 \section{Dise\~ no}
 %%%%%%%%%%%%%%
+\begin{comment}
 \textit{Debe describir el dise\' ~o y su implementaci\' on. Se deben incluir diagramas de bloques o de estados, en caso de ser necesario. Deben explicar c\' omo funciona el dise\' ~o, y tener claro qu\' e elementos son clave de mencionar para que el lector pueda comprender c\' omo funciona el dise\' ~o. No incluya simulaciones en esta secci\' on, no incluya informaci\' on detallada del c\' odigo Verilog, la explicaci\' on debe ser de alto nivel. Debe brindarse una discusi\' on balanceada entre lo que usted implement\' o y porqu\' e se eligi\' o esa implementaci\' on. }
+\end{comment}
 
 \subsection{Generalidades}
 
@@ -123,7 +125,7 @@ La \' unica ocaci\' on en que la etapa EX/MEM no utiliza la memoria principal es
 
 
 \subsection{Etapa de Write Back (WB)}
-La etapa del procesador que se encarga de escribir desde los registros hasta la memoria principal o de la ALU hacia los registros deben pasar por esta etapa por lo tanto cuenta con ciertas sen\~ nales de control como se puede observar en el diagrama arquitect\' onico.
+La etapa del procesador que se encarga de escribir desde los registros hasta la memoria principal o de la ALU hacia los registros deben pasar por esta etapa por lo tanto cuenta con ciertas se\~ nales de control como se puede observar en el diagrama arquitect\' onico.
 
 Para esta etapa realmente la duraci\' on del ciclo no esta relacionada con el manejo de la instrucci\' on, sino m\' as bien con la duraci\' on de la memoria principal para las lecturas y escrituras. En este caso  dado que la simualaci\' on es conductual y no presenta retardos de propagaci\' on, no se tiene en cuenta este factor, sin embargo, si es importante hacer la aclaraci\' on de que en un caso real, la mayor parte del tiempo que se encuentre en este ciclo es por acceso de la memoria principal.
 

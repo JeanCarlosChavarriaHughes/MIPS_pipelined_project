@@ -1,9 +1,12 @@
 //*************************************************//
 //***	Author: JeanCarlos Chavarria Hughes		***//
+//***			 Alejandro Masis Castillo		***//
+//***			 Natalia Araya Campos			***//
 //***	email: negrotico19@gmail.com			***//
 //***	Part of the pipelined_processor project ***//
-//***	url: https://github.com/JeanCarlosChavarriaHughes/MIPS_pipelined_project.git
 //*************************************************//
+
+//url: https://github.com/JeanCarlosChavarriaHughes/MIPS_pipelined_project.git
 
 /* This is the ALU module
 * 	One the alu operation is established

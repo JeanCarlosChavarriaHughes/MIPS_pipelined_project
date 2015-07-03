@@ -12,6 +12,11 @@ module branch_taken(
 	
 	always @(*)
 	begin
+		if(branch_taken == 0)			// Revisa si se toma el salto BAEQ.
+			begin
+				taken = 0;
+			end
+			
 		if(branch_taken == 1)			// Revisa si se toma el salto BAEQ.
 			begin
 				if(ZA == 1)				
@@ -130,7 +135,6 @@ module branch_taken(
 					taken = 0;
 					
 			end
-			
 	end
 	
 endmodule

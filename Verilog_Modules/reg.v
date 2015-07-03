@@ -7,6 +7,11 @@ module register(
 	output reg [7:0] out
 	);
 
+initial
+	begin
+	out = 0;
+	end
+
 always @(select or in)
 	begin
 	#1 if (select)

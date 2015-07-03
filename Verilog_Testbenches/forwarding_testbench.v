@@ -1,21 +1,15 @@
 `include "./../Verilog_Modules/forwarding_unit.v"
-`include "./../Verilog_Modules/instruction_rom.v"
+`include "./../Verilog_Modules/instruction_rom_forward.v"
 `include "./../Verilog_Modules/ffd.v"
+`include "./../Verilog_Modules/Defintions.v"
 `timescale 1ns/100ps
 
 module decode_tester(
 	
-	input wire [9:0] const,
-	input write_to_a, //Salida en alto si la instrucción escribe en el registro A
-	input write_to_b, //Salida en alto si la instrucción escribe en el registro A
-	input mux_pre_alu_a,//Salida en bajo si se elige enviar a la ALU el contenido del registro A
-	input mux_pre_alu_b,//Salida en bajo si se elige enviar a la ALU el contenido del registro B
-	input read_write,	//Salida en alto si se va a hacer una escritura en la memoria. Bajo para lectura
-	input write_back_mux,//Salida en alto para tomar el dato al que se va a hacer write back de la salida de la memoria. Bajo para que sea la salida de la ALU
-	input [1:0] write_mux,
-	input jump,
-	input [3:0] branch_taken,
-	input [15:0] inst,
+	input outputA_EX,
+	input outputA_MEM,
+	input outputB_EX,
+	input outputB_MEM,
 	output reg		[9:0]		pc,
 	output reg					clk
 	);
@@ -23,76 +17,67 @@ module decode_tester(
 	
 	initial
 		begin
-			$dumpfile("decoder.vcd");
+			$dumpfile("forward.vcd");
 			$dumpvars;
 			$display("Time Diagram");
-			$monitor("t=",$time,,"PC: %d",pc,, "Instruccion: $%h", inst[15:10]);
+			$monitor("t=",$time,,"PC: %d",pc,,"OutputA_EX: ", outputA_EX,, "OutputA_MEM: ", outputA_MEM,, "OutputB_EX: ", outputB_EX,, "OutputB_MEM: ", outputB_MEM,, );
 		end		
 	initial
 		begin
-			clk = 0;
+			clk = 1;
 			pc = 0;
 		end
 	
 	initial
 		begin
-			repeat(13)
+			repeat(16)
 				begin
-					#2 pc = pc + 1;
+					#20 pc = pc + 1;
 				end
-				#2 $finish;
+				#20 $finish;
 		end
 	initial
 		begin
 			repeat(50)
-				#1 clk = ~clk;
+				#10 clk = ~clk;
 		end
 
 endmodule
 
 module TestBench;
 
-	wire [1:0] write_mux;
-	wire [9:0] const;
-	wire [3:0] branch_taken;
+
 	wire [9:0] pc;
 	wire [9:0] iAddress;
 	wire [15:0] oInstruction;
-	wire [15:0] inst;
-	wire write_to_a, write_to_b, mux_pre_alu_a, mux_pre_alu_b, read_write, write_back_mux, jump;
+	wire [5:0] instruction_EX, instruction_MEM;
+	wire outputA_EX, outputA_MEM, outputB_EX, outputB_MEM;
 	wire clk;
 	
-	decode_tester Test1(const, 
-						write_to_a,
-						write_to_b,
-						mux_pre_alu_a,
-						mux_pre_alu_b,
-						read_write,
-						write_back_mux,
-						write_mux,
-						jump,
-						branch_taken,
-						oInstruction,
+	decode_tester Test1(outputA_EX,
+						outputA_MEM,
+						outputB_EX,
+						outputB_MEM,
 						pc,
 						clk);
 						
 	instruction_rom Mem(iAddress,
 						oInstruction);
-						
-	inst_decoder Decoder(inst,
-						const,
-						write_to_a,
-						write_to_b,
-						mux_pre_alu_a,
-						mux_pre_alu_b,
-						read_write,
-						write_back_mux,
-						write_mux,
-						jump,
-						branch_taken);
+	
+	
+					
+	forwarding unit1(clk,
+					oInstruction[15:10],
+					instruction_EX,
+					instruction_MEM,
+					outputA_EX,
+					outputA_MEM,
+					outputB_EX,
+					outputB_MEM);
+
+	FFD_POSEDGE_SYNCRONOUS_RESET #6 ff1( clk, 1'b0, 1'b1, oInstruction[15:10], instruction_EX);
+	FFD_POSEDGE_SYNCRONOUS_RESET #6 ff2( clk, 1'b0, 1'b1, instruction_EX, instruction_MEM);
 	assign iAddress = pc;						
-	//FFD_POSEDGE_SYNCRONOUS_RESET #10 ffd_1( clk, 0, 1, pc, iAddress);
-	FFD_POSEDGE_SYNCRONOUS_RESET #16 ffd_2( clk, 0, 1, oInstruction, inst);
 
 endmodule
 

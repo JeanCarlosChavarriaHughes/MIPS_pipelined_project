@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-`include "./Defintions.v"
+`include "../Verilog_Modules/Defintions.v"
 
 module inst_decoder(
 	
@@ -77,8 +77,8 @@ module inst_decoder(
 			begin
 				write_to_a = 0;
 				write_to_b = 0;
-				mux_pre_alu_a = 0;
-				mux_pre_alu_b = 1;
+				mux_pre_alu_a = 1;
+				mux_pre_alu_b = 0;
 				read_write = 1;
 				write_back_mux = 0;
 				write_mux = 1;
@@ -492,6 +492,22 @@ module inst_decoder(
 				write_mux = 0;
 				jump = 0;
 				branch_taken = 12;
+			end
+			`NOP:
+			begin
+				write_to_a = 0;
+				write_to_b = 0;
+				mux_pre_alu_a = 0;
+				mux_pre_alu_b = 0;
+				read_write = 0;
+				write_back_mux = 0;
+				write_mux = 0;
+				jump = 0;
+				branch_taken = 0;
+			end
+			default:
+			begin
+				$display("Debuguee");
 			end
 		endcase
 	end

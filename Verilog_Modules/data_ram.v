@@ -7,16 +7,30 @@ module memory (Enable, ReadWrite, Address, DataIn, DataOut);
 	output [7: 0] DataOut;
 	reg [7: 0] DataOut;
 	reg [7: 0] Mem [0: 1023];
-	
+	reg [9:0] k;
 	initial
 		begin
-			Mem[0] = $random(0)% 10000;
+			DataOut = 0;
+			/*for (k = 0; k < 1024 ; k = k + 1) 
+				begin 
+					Mem[k] = 8'h00; 
+				end*/
+			Mem[0] = 8'h99; 
+			Mem[1] = 8'h99;
+			Mem[2] = 8'h99;
+			Mem[3] = 8'h99;
+			Mem[4] = 8'h99;
+			Mem[5] = 8'h99;
+			Mem[6] = 8'h99;
+			Mem[7] = 8'h99;
+			Mem[8] = 8'h99;
+			Mem[9] = 8'h99;
 		end
 	
 	// 64 x 4 memory
-	always @ (Enable or ReadWrite)
+	always @ (Enable or ReadWrite or DataIn)
 		if (Enable)
-			if (ReadWrite) DataOut = Mem [Address];
+			if (~ReadWrite) DataOut = Mem [Address];
 			// Read
 			else Mem [Address] = DataIn;
 		// Write
