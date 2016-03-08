@@ -1,0 +1,92 @@
+#! /usr/local/bin/vvp
+:ivl_version "0.10.0 (devel)" "(s20141205-323-g1b3e321)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision - 12;
+:vpi_module "system";
+:vpi_module "vhdl_sys";
+:vpi_module "v2005_math";
+:vpi_module "va_math";
+S_0xaf0cf0 .scope module, "TestBench" "TestBench" 2 36;
+ .timescale -9 -10;
+v0xb18820_0 .net "branch", 9 0, v0xb17ec0_0;  1 drivers
+v0xb18930_0 .net "const", 15 0, v0xb18610_0;  1 drivers
+v0xb18a40_0 .net "pc_in", 9 0, v0xb186e0_0;  1 drivers
+S_0xb04f40 .scope module, "Calc" "branch_calc" 2 45, 3 2 0, S_0xaf0cf0;
+ .timescale -9 -12;
+    .port_info 0 /INPUT 10 "pc_in"
+    .port_info 1 /INPUT 16 "const"
+    .port_info 2 /OUTPUT 10 "branch"
+L_0x7f5dfe306018 .functor BUFT 1, C4<0000>, C4<0>, C4<0>, C4<0>;
+v0xb05110_0 .net/2u *"_s2", 3 0, L_0x7f5dfe306018;  1 drivers
+v0xb17d10_0 .net *"_s5", 5 0, L_0xb18bd0;  1 drivers
+v0xb17df0_0 .net "bit", 0 0, L_0xb18b30;  1 drivers
+v0xb17ec0_0 .var "branch", 9 0;
+v0xb17fa0_0 .net "const", 15 0, v0xb18610_0;  alias, 1 drivers
+v0xb180d0_0 .net "pc_in", 9 0, v0xb186e0_0;  alias, 1 drivers
+v0xb181b0_0 .net "value_branch", 9 0, L_0xb18d30;  1 drivers
+E_0xaefbc0 .event edge, v0xb17df0_0, v0xb181b0_0, v0xb180d0_0;
+L_0xb18b30 .part v0xb18610_0, 6, 1;
+L_0xb18bd0 .part v0xb18610_0, 0, 6;
+L_0xb18d30 .concat [ 6 4 0 0], L_0xb18bd0, L_0x7f5dfe306018;
+S_0xb18310 .scope module, "Test1" "branch_calc_tester" 2 41, 2 4 0, S_0xaf0cf0;
+ .timescale -9 -10;
+    .port_info 0 /OUTPUT 10 "pc_in"
+    .port_info 1 /OUTPUT 16 "const"
+    .port_info 2 /INPUT 10 "branch"
+v0xb18530_0 .net "branch", 9 0, v0xb17ec0_0;  alias, 1 drivers
+v0xb18610_0 .var "const", 15 0;
+v0xb186e0_0 .var "pc_in", 9 0;
+    .scope S_0xb18310;
+T_0 ;
+    %vpi_call 2 13 "$dumpfile", "branch_calc.vcd" {0 0 0};
+    %vpi_call 2 14 "$dumpvars" {0 0 0};
+    %vpi_call 2 15 "$display", "Time Diagram" {0 0 0};
+    %vpi_call 2 16 "$monitor", "t=", $time, " ", "PC: %d", v0xb186e0_0, " ", "Bit: %b", &PV<v0xb18610_0, 6, 1>, " ", " Const: %d", &PV<v0xb18610_0, 0, 6>, " ", "Branch: %d", v0xb18530_0 {0 0 0};
+    %end;
+    .thread T_0;
+    .scope S_0xb18310;
+T_1 ;
+    %pushi/vec4 100, 0, 10;
+    %store/vec4 v0xb186e0_0, 0, 10;
+    %delay 200000, 0;
+    %pushi/vec4 69, 0, 16;
+    %store/vec4 v0xb18610_0, 0, 16;
+    %delay 200000, 0;
+    %pushi/vec4 10, 0, 16;
+    %store/vec4 v0xb18610_0, 0, 16;
+    %delay 200000, 0;
+    %pushi/vec4 84, 0, 16;
+    %store/vec4 v0xb18610_0, 0, 16;
+    %delay 200000, 0;
+    %pushi/vec4 30, 0, 16;
+    %store/vec4 v0xb18610_0, 0, 16;
+    %delay 200000, 0;
+    %vpi_call 2 30 "$finish" {0 0 0};
+    %end;
+    .thread T_1;
+    .scope S_0xb04f40;
+T_2 ;
+    %wait E_0xaefbc0;
+    %load/vec4 v0xb17df0_0;
+    %pad/u 32;
+    %cmpi/e 0, 0, 32;
+    %jmp/0xz  T_2.0, 4;
+    %load/vec4 v0xb181b0_0;
+    %load/vec4 v0xb180d0_0;
+    %add;
+    %store/vec4 v0xb17ec0_0, 0, 10;
+    %jmp T_2.1;
+T_2.0 ;
+    %load/vec4 v0xb180d0_0;
+    %load/vec4 v0xb181b0_0;
+    %sub;
+    %store/vec4 v0xb17ec0_0, 0, 10;
+T_2.1 ;
+    %jmp T_2;
+    .thread T_2, $push;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "branch_calc_testbench.v";
+    "././../Verilog_Modules/branch_calc.v";

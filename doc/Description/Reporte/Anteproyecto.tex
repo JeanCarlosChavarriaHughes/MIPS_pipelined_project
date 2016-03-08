@@ -1,0 +1,82 @@
+\documentclass[12pt,letterpaper]{article}     % Tipo de documento y otras especificaciones
+\usepackage[utf8]{inputenc}                   % Para escribir tildes y e\' ~es
+\usepackage[spanish]{babel}                   % Para que los t\' itulos de figuras, tablas y otros est\' en en espa\' ~ol
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}					% Cambiar nombre a tablas
+\addto\captionsspanish{\renewcommand{\listtablename}{\' indice de tablas}}		% Cambiar nombre a lista de tablas
+\usepackage{geometry}                         
+\geometry{left=18mm,right=18mm,top=21mm,bottom=21mm} % Tama\' ~o del \' area de escritura de la p\' agina
+\usepackage{ucs}
+\usepackage{amsmath}      % Los paquetes ams son desarrollados por la American Mathematical Society
+\usepackage{amsfonts}     % y mejoran la escritura de f\' ormulas y s\' imbolos matem\' aticos.
+\usepackage{tabularx}	% adjust the textwidth of the tables
+\usepackage{longtable} % Divide one table in multiple pages
+\usepackage{ltablex}
+\usepackage{amssymb}
+\usepackage{graphicx}     % Para insertar gr\' aficas
+\usepackage[lofdepth,lotdepth]{subfig}	% Para colocar varias figuras
+\usepackage{unitsdef}	  % Para la presentaci\' on correcta de unidades
+\usepackage{pdfpages}   %incluir paginas de pdf externo, para los anexos
+\usepackage{appendix}   %para los anexos
+\renewcommand{\unitvaluesep}{\hspace*{4pt}}	% Redimensionamiento del espacio entre magnitud y unidad
+\usepackage[colorlinks=true,urlcolor=blue,linkcolor=black,citecolor=black]{hyperref}     % Para insertar hiperv\' inculos y marcadores
+\usepackage{float}		% Para ubicar las tablas y figuras justo despu\' es del texto
+\usepackage{booktabs}	% Para hacer tablas m\' as estilizadas
+\batchmode
+\bibliographystyle{plain} 
+\pagestyle{plain} 
+\pagenumbering{arabic}
+\usepackage{lastpage}
+\usepackage{fancyhdr}	% Para manejar los encabezados y pies de p\' agina
+\usepackage{verbatim}
+
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+
+\usepackage{listings}
+
+
+
+\pagestyle{fancy}		% Contenido de los encabezados y pies de pagina
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+
+
+\lhead{IE0521 - Laboratorio 1}
+\chead{}
+\rhead{Tarea 3}	% Aqu\' i va el numero de experimento, al igual que en el titulo
+\lfoot{Escuela de Ingenier\' ia El\' ectrica}
+\cfoot{\thepage\ de \pageref{LastPage}}
+\rfoot{Universidad de Costa Rica}
+
+
+\author{Natalia Araya Campos, B00448 \\ JeanCarlos Chavarr\' ia Hughes, B11814 \\  Alejandro Masís Castillo, B13960\\ {\small Grupo 01}\\ Profesor: Erick Carvajal  \vspace*{3.0in}}
+\title{Universidad de Costa Rica\\{\small Facultad de Ingenier\' ia\\Escuela de Ingenier\' ia El\' ectrica\\IE0521 – Estructuras de Computadoras II\\I ciclo 2015\\\vspace*{0.55in} Reporte 4}\\ Laboratorio 4: Procesador segmentado con \textit{pipelining} \vspace*{1.35in}}
+%\date{}  				
+
+%%%%%%%%%%%%%%%%
+\begin{document}	% Inicio del documento
+%%%%%%%%%%%%%%%%
+
+\pdfbookmark[1]{Portada}{portada} 	% Marcador para el t\' itulo
+
+\maketitle							% T\' itulo
+
+
+\tableofcontents
+\newpage
+\listoffigures
+\listoftables
+
+\include{Objetivos}
+\include{Introduccion}
+\include{ManejoProyecto}
+\include{Diseno}
+\include{EstrategiaPruebas}
+\include{Evaluacion}
+\include{Conclusiones}
+\include{Bibliografia}
+\include{Apendices}
+
+%%%%%%%%%%%%%%
+\end{document}
+%%%%%%%%%%%%%%

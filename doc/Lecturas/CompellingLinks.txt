@@ -1,0 +1,11 @@
+enlaces interesantes para pipelining
+
+git repository: https://github.com/jmahler/mips-cpu.git
+
+hawai: http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/lab5.html
+
+Pennsy: https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/
+
+Excelent Final Report: http://www.csie.ntu.edu.tw/~b98902125/305formalreport.pdf
+
+

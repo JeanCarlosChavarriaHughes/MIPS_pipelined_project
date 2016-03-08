@@ -1,0 +1,655 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0054)https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/">
+<title>Lab 3 - Pipelined Processor</title>
+<link rel="stylesheet" href="./Lab 3 - Pipelined Processor_files/rst.css" type="text/css">
+<style type="text/css"></style></head>
+<body>
+<div class="document" id="lab-3-pipelined-processor">
+<h1 class="title">Lab 3 - Pipelined Processor</h1>
+<h2 class="subtitle" id="cse-372-spring-2007-digital-systems-organization-and-design-lab">CSE 372 (Spring 2007): Digital Systems Organization and Design Lab</h2>
+<p><strong>Datapath design document</strong> due Friday, March 30</p>
+<p><strong>Preliminary Demo</strong> by Friday, April 13</p>
+<p><strong>Final Demo</strong> by Friday, April 20 (last day of classes)</p>
+<p><strong>Writeup</strong> due Friday, April 20 (last day of classes)</p>
+<p>This lab is to be done in <strong>groups</strong>.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first"><a name="contents">Contents</a></p>
+<ul class="simple">
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#overview" id="id3" name="id3">Overview</a><ul>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#part-1-five-stage-pipeline" id="id4" name="id4">Part 1: Five-Stage Pipeline</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#part-2-improving-the-cpi" id="id5" name="id5">Part 2: Improving the CPI</a></li>
+</ul>
+</li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#tiered-lab-grading" id="id6" name="id6">Tiered Lab Grading</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#design-document" id="id7" name="id7">Design Document</a><ul>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#id1" id="id8" name="id8">Part 1: Five-Stage Pipeline</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#id2" id="id9" name="id9">Part 2: Improving the CPI</a></li>
+</ul>
+</li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#the-pipelined-datapath" id="id10" name="id10">The Pipelined Datapath</a><ul>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#pipeline-registers" id="id11" name="id11">Pipeline Registers</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#memory" id="id12" name="id12">Memory</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#full-bypassing" id="id13" name="id13">Full Bypassing</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#load-stalling" id="id14" name="id14">Load Stalling</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#handling-branches" id="id15" name="id15">Handling Branches</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#branch-prediction" id="id16" name="id16">Branch Prediction</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#performance-counters" id="id17" name="id17">Performance Counters</a></li>
+</ul>
+</li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#multi-phased-implementation" id="id18" name="id18">Multi-Phased Implementation</a><ul>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#phase-a" id="id19" name="id19">Phase A</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#phase-b" id="id20" name="id20">Phase B</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#phase-c" id="id21" name="id21">Phase C</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#phase-d" id="id22" name="id22">Phase D</a></li>
+</ul>
+</li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#testing" id="id23" name="id23">Testing</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#verilog-restrictions" id="id24" name="id24">Verilog Restrictions</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#coding-tips-and-style-suggestions" id="id25" name="id25">Coding Tips and Style Suggestions</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#demos" id="id26" name="id26">Demos</a><ul>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#final-demo-specifics" id="id27" name="id27">Final Demo Specifics</a></li>
+</ul>
+</li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#what-to-turn-in" id="id28" name="id28">What to Turn In</a></li>
+<li><a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/#addendum" id="id29" name="id29">Addendum</a></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h1><a name="overview">Overview</a></h1>
+<p>In this final lab of the semester, you will construct a dual-issue
+superscalar pipelined processor for the <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/p37x.html">P37X</a> ISA.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">This final lab of the semester is the most intellectually challenging of the
+labs.  As with the previous lab, this lab doesn't require that much Verilog
+code, but reasoning about the pipelining bypass and stall logic requires
+significant planning.</p>
+</div>
+<div class="section" id="part-1-five-stage-pipeline">
+<h2><a name="part-1-five-stage-pipeline">Part 1: Five-Stage Pipeline</a></h2>
+<p>This processor will have the now-familiar five-stage pipeline:</p>
+<ol class="arabic simple">
+<li>Fetch (F): reads the next instruction from the memory</li>
+<li>Decode (D): reads the register file, determines the control signals
+for the rest of the pipeline stages, and selects the proper immediate
+values from the instruction.</li>
+<li>Execute (X): the ALU performs its calculation and branches are resolved</li>
+<li>Memory (M): read or write the data memory</li>
+<li>Writeback (W): write the register file</li>
+</ol>
+<p>All instructions travel through all five stages.  Branches are resolved
+in the execute stage, so a mispredicted branch has a two-cycle penalty.
+To reduce the number of branch mispredictions, your processor will use a
+simple "next-PC" branch predictor during the fetch stage.  The data
+memory is read during the memory stage, so a load followed by a
+dependent instruction will add a one-cycle stall to the pipeline.  A
+load followed by a store instruction where only the value to be written
+is dependent should not cause a stall.  The pipeline is fully bypassed,
+so all other instructions execute without stalling.</p>
+</div>
+<div class="section" id="part-2-improving-the-cpi">
+<h2><a name="part-2-improving-the-cpi">Part 2: Improving the CPI</a></h2>
+<p>The second part of the assignment is to improve your processor's
+performance by improving its CPI.  To help focus your CPI-enhancing
+efforts, we'll give you <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/benchmarks.zip">suite of simple benchmark programs</a>.  Your goal
+is to improve the CPI of these specific programs.  Your final lab report
+will require you compare the CPI of the baseline 5-stage pipeline
+specified below to your enhanced processor.  You'll look to enhance the
+CPI of your processor in two ways:</p>
+<ol class="upperalpha simple">
+<li>Reduce lost cycles due to branch misprediction by increase the
+prediction accuracy.</li>
+<li>Extending the pipeline to fetch, decode, and execute up to two
+instructions per cycle.</li>
+</ol>
+<p>Exactly how you choose to design and implement this improved processor
+is up to you.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">Your pipeline must keep the full five-stages (including the memory
+stage), otherwise the clock frequency would suffer.  As such, there
+will still be load-use stalls, and there isn't any really good way to
+mitigate those stalls.</p>
+</div>
+</div>
+</div>
+<div class="section" id="tiered-lab-grading">
+<h1><a name="tiered-lab-grading">Tiered Lab Grading</a></h1>
+<p>This lab has an unusual tiered grading structure.  As mentioned in
+class, the goal is to both provide a challenge to those students that
+want it, but yet allow everyone to complete the lab without ridiculous
+amounts of effort.  You as a group will need to decide which tier you
+wish to shoot for:</p>
+<ul class="simple">
+<li>"B level": If your group is burned out after lab 2 and happy with a B
+in the course, you can stop and not even begin to attempt this
+project.  You've already build a working processor, which is worth of
+a passing grade in the lab.</li>
+<li>"B+ level": Successful completion of part one of the lab (the 5-stage
+pipeline) puts your group in the B+ level.  This tier is for those
+groups that want to avoid the less structured aspects of part two of
+the lab.</li>
+<li>"A- level": By completing part 2(a) of the lab (defined as
+substantially reducing the branch misprediction rate), your group is
+in the A- level.  This tier is for groups that are willing to be a bit
+more creative to figure our how to improve the branch prediction,
+without tackling the substantial extra complexity of implementing the
+superscalar pipeline.  This tier is the sweet spot in terms of effort
+versus grade potential.</li>
+<li>"A level": By completing all of part 2 of the lab (defined as both
+reducing the branch stalls <em>and</em> achieving an IPC of greater than one
+(CPI &lt; 1) on some of the programs in the benchmark suite), your
+group will have accomplished a significant feat, putting you in the A
+level.</li>
+</ul>
+<p>The tiers above are a upper bound for your <em>course</em> grade, assuming that
+you completed all of the other course projects with good scores.  This
+tiered system is a replacement of last year's honors points.</p>
+</div>
+<div class="section" id="design-document">
+<h1><a name="design-document">Design Document</a></h1>
+<p>Before you begin writing the Verilog code, you're going to need to
+figure out the design of your new processor.  This process should
+include considering all aspects of the design and testing of the
+processor.  You'll want to consider how the datapath is broken into
+stages, identify which values are placed in pipeline latches, uncover
+any tricky bypassing cases, and decide upon a strategy for stalling the
+pipeline and recovering from branch mispredictions.  You'll likely want
+to include a detailed pipeline diagram and list of what values are
+placed in pipeline latches between each stage.</p>
+<div class="important">
+<p class="first admonition-title">Important</p>
+<p class="last">The entire goal of the design document is to help (force) you to
+really think through the design.  The design document is not intended
+to be busy work; I'm forcing you to do this because I think it will
+save you time in the end.  One corollary to this is that you
+shouldn't spend significant time polishing the document.  However,
+you need to convince the grader that you've actually deeply
+considered all aspects of the design and that you're adequately
+prepared to begin the implementation.</p>
+</div>
+<p>The design document will have two parts, and the two parts of the design
+document directly correspond to the two parts of the assignment.</p>
+<div class="section" id="id1">
+<h2><a name="id1">Part 1: Five-Stage Pipeline</a></h2>
+<ul class="simple">
+<li><strong>Design decisions</strong>: Describe in prose any high-level design
+decisions for your pipelined datapath.  This should be a substantial
+portion of this part of the design document.</li>
+<li><strong>Pipeline diagram</strong>: You'll probably want a pipeline datapath
+diagram.  You can draw out the diagram on a single page or use one
+page per pipeline stage (it is actually hard to fit it all on one
+page).  If you find it useful, you can use the <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/p37x_datapath.ppt">single-cycle datapath
+drawn in powerpoint</a> as a starting point.</li>
+<li><strong>Pipeline latches</strong>: Give a table or list that describes which values you're
+latching between which stages.  Give these signals good names that you'll
+then use in your actual Verilog code.  For example, you might want to call
+the PC in the fetch stage F_PC, the PC in the decode stage D_PC, and latch
+between the stages the FD_PC register.  You'll probably want every signal
+prepended with either F, D, X, M, or W to distinguish in which stage the
+signal belongs.</li>
+<li><strong>Testing plan</strong>: How are you going to test your design?  Both for <em>functional</em> 
+correctness and <em>performance</em> correctness.</li>
+<li><strong>Implementation plan</strong>: Which group members are going to do what part
+of the implementation?  Which part will be done first?  What can be
+done at the same time?  What must be done consecutively?</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2><a name="id2">Part 2: Improving the CPI</a></h2>
+<p>In the second part of the design document, you'll want to discuss the
+CPI improvements you plan and the overall design and implementation
+plan.  You should also explicitly state what tier you're targeting.
+Discuss the techniques you'd like to use for improving the branch
+prediction rate.  If you're targeting the superscalar design, you'll
+want to describe the trickiest aspects of the design.</p>
+</div>
+</div>
+<div class="section" id="the-pipelined-datapath">
+<h1><a name="the-pipelined-datapath">The Pipelined Datapath</a></h1>
+<p>The pipelined datapath is similar to the non-pipelined datapath from the
+previous lab, but has some extensions.  The most important change is
+that each part of the datapath logically needs to live in one pipeline
+stage or another.  Some structures such as the memory and register file
+are in multiple pipeline stages (F&amp;M and D&amp;W, respectively).</p>
+<p>You should re-use most of your controller logic from the single-cycle pipeline
+by placing the controller module in the decode stage, and then adding the
+appropriate pipeline registers so that each control signal is used in the
+correct stage.</p>
+<div class="section" id="pipeline-registers">
+<h2><a name="pipeline-registers">Pipeline Registers</a></h2>
+<p>In addition to all the structures in the datapath in <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab2/">lab2</a>, the pipelined
+datapath introduces pipeline "latches" or registers.  To implement these
+registers, use the same <tt class="docutils literal"><span class="pre">Nbit_reg</span></tt> Verilog module as you used for the program
+counter and internals of the register file.</p>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">We'll use both of the terms "pipeline registers" and "pipeline latches" to
+refer to flip-flop based structures for holding state between pipeline
+stages.  No actual level-sensitive latches are used in the pipeline.</p>
+</div>
+</div>
+<div class="section" id="memory">
+<h2><a name="memory">Memory</a></h2>
+<p>The memory module is similar to the module you used for the previous
+lab.  As before, we're using the same "global write enable (GWE)" trick,
+so the memory module will appear as a transparent memory (whereas in
+reality the block RAMs are internally latched).</p>
+<p>To support superscalar fetch and execute, we'll provide you when an
+updated memory module that includes two fetch ports and two read/write
+data ports.  This will allow your processor to fetch two instructions
+per cycle and execute two memory operations per cycle.  If a store and
+load are both executed in the cycle to the same address, which ports are
+used determines if the load (read) will receive the old value or new
+value.  If the load is in the first or "top" port and the store is in
+the second of "bottom" port, the load will receive the <em>old</em> value.  If
+the store is in the top port and the load is in the bottom port, the
+load will return the <em>new</em> value.  If two stores (writes) to the same
+address occur in the same cycle, the "lower" store will be the value
+that persists.  Basically, as long as you always route the older
+instruction to the top data port, this should allow your processor to
+execute any mixture of two memory operations in the same cycle.</p>
+<p>When working on the initial single-issue processor, just ignore the
+additional ports.</p>
+</div>
+<div class="section" id="full-bypassing">
+<h2><a name="full-bypassing">Full Bypassing</a></h2>
+<p>The pipeline is fully bypassed, so you should implement M-&gt;X bypassing, W-&gt;X
+bypassing, and W-&gt;M bypassing.  To do this, you'll need to add another mux in
+front of both ALUs inputs and a mux in front of the data input into the memory.
+The data bypass logic (the control for these muxes) examines the registers
+written by prior instructions (looking at the write enable signal to make sure
+the instruction actually wrote a register).  Notice that the destination
+register and its corresponding write enable signal must already be latched for
+use in the writeback stage.  Be careful not to bypass a value from a prior
+instruction that either doesn't write a register or an instruction that has
+been squashed due to a branch misprediction.</p>
+<p>You'll also need to bypass around the register file.  The register file
+you created in the last lab is somewhat different than the register file
+used in the pipeline described in the CSE371 lecture.  When a register
+is read and written in the same cycle, our register file from <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab2/">lab2</a>
+returns the <em>old</em> value.  For this pipelined design, we want it to
+return the <em>newly</em> written value.  More specifically, if the register
+file write enable is asserted, and the register being read matches that
+being written, you'll write to return the new value being written (and
+<em>not</em> the old value).</p>
+<p>You can implement this register file bypass one of two ways: (1) make a wrapper
+around the existing register file that does this bypassing locally or (2) latch
+the written value separately and then add an additional input into the
+ALU-input bypass muxes.  The first option is perhaps simpler to reason about,
+but it adds an extra mux to the register read critical path.  Option two is a
+little bit different than what you've seen in lecture, but it doesn't add a new
+mux (it just expands an existing mux), so it is perhaps faster.  It is your
+choice on how you want to implement this.</p>
+</div>
+<div class="section" id="load-stalling">
+<h2><a name="load-stalling">Load Stalling</a></h2>
+<p>In this pipeline, loads have an extra load-use delay.  Thus, if a load is
+followed by a <em>dependent</em> instruction that uses the value in the execute stage,
+the dependent instruction must be stalled for one cycle.  If the dependent
+register value isn't needed until the memory stage (for example, as the store's
+data input value), it should <em>not</em> be stalled.</p>
+<p>Detect the stall during the decode stage by looking both at the current
+instruction and at the instruction in the execute stage.  To implement the
+stall, insert a no-operation into the pipeline (which will propagate down the
+pipeline just like a normal instruction). The next cycle, the same logic that
+detected the stall on the previous cycle will then detect "no stall", because
+the load will have moved further down the pipeline.</p>
+<p>Be sure not to falsely stall any instruction whose encoding might match the
+previous instruction's output register, but does not actually read the
+register.  For example, the JUMP instruction doesn't read any registers, so it
+shouldn't be stalled just because the bits in its immediate field happen to
+match the output register of a prior load.  Over-stalling is difficult to
+detect because it is a "performance bug" and not a "correctness bug".  That is,
+you'll get the right answer, but your processor will have a worse CPI than it
+should.</p>
+</div>
+<div class="section" id="handling-branches">
+<h2><a name="handling-branches">Handling Branches</a></h2>
+<p>Instructions that manipulate the program counter (TRAP, RTT, JUMP,
+JUMPR, JSR, JSRR, and BR) need additional handling.  As the value of the
+<em>next</em> program counter of the instruction that follows one of these
+instructions is determined in the execute stage, this pipeline uses a
+simple branch predictor to predict the next program counter and
+speculatively fetch and decode the next two instructions.  During the
+execute stage, the "actual next PC" of the instruction is compared with
+the predicted PC (the PC of the instruction in the decode stage).  Only
+if the "actual next PC" and predicted PC match, was the prediction
+correct.</p>
+<p>If the predicted "next PC" is correct, execution continues normally.  If
+the predicted "next PC" is incorrect, the instructions currently in the
+fetch and decode stages must be annulled (also know as "squashed").  To
+annul these instructions, their control signals should be transformed to
+convert it into a no-operation before they are latched into the next
+stage (for example, by using a mux right before the pipeline latches).</p>
+</div>
+<div class="section" id="branch-prediction">
+<h2><a name="branch-prediction">Branch Prediction</a></h2>
+<p>In this lab you'll implement a few different branch prediction schemes
+that guess a "next PC":</p>
+<ol class="arabic">
+<li><p class="first">Predict Not-Taken.  Just predict PC+1 as the next PC.</p>
+</li>
+<li><p class="first">Single-entry Predictor.  To make our branch predictor more accurate,
+we're going to use a simple "next PC" predictor accessed during the
+fetch stage and updated in the execute stage.  To generate a
+prediction, the predictor takes in the current PC (a 16-bit input)
+and generates a "next PC" prediction (a 16-bit output).  For updating
+during the execute stage, the predictor takes in the PC of the
+instruction in the execute stage (a 16-bit input), the actual "next
+PC" of the instruction (a 16-bit input), and a single-bit write
+enable (asserted only if the prediction was incorrect).  Notice that
+nowhere are the actual bits of the instruction itself used.</p>
+<p>This simple single-entry predictor consists of two registers: the
+"tag" register and the "predicted PC" register.  Each time the
+predictor is accessed, it compares the input PC with the contents of
+the tag register.  If the tag matches the input PC, the predicted PC
+will be the value of the "predicted PC" register.  If the tag does
+not match, the predicted next PC is PC+1.  The predictor registers
+are both updated when an instruction's next PC is mispredicted.  Both
+the "tag" register and "next PC" register is updated on a mispredict.</p>
+</li>
+<li><p class="first">Your own new and improved predictor.  In part 2 of this lab, you're
+asked to create your own improved predictor to reduce the
+misprediction rate.  The most simple change would be to extend the
+predictor to track more than one branch (use a multi-entry table,
+indexed with the low-order bits of PC).  Much like a cache, such as
+table could be direct mapped, set-associative, or even
+fully-associative (with direct-mapped being by far the easiest).  For
+other ideas on how to improve the branch prediction, you may wish to
+look at the <a class="reference" href="http://www.cis.upenn.edu/~milom/cis501-Fall05/lectures/06_pipeline.pdf">CIS501 slides on branch prediction</a> starting on slide
+48.</p>
+</li>
+</ol>
+<p>For the final writeup, you'll need to compare the performance of these
+three predictors using the performance counters (described next).</p>
+<p>To make this comparison easier, you may want to have your processor
+select the branch prediction mode using one of the board's switches,
+allowing you to select the specific predictor on the fly.</p>
+</div>
+<div class="section" id="performance-counters">
+<h2><a name="performance-counters">Performance Counters</a></h2>
+<p>Real processors have <em>performance counters</em> that track various events within a
+processor to help understand its performance.  In this lab, we're going to add
+four memory-mapped performance counters:</p>
+<ul class="simple">
+<li><strong>Cycle count</strong> - 0xFF00: the number of cycles since the processor was last
+reset</li>
+<li><strong>Instruction count</strong> - 0xFF01: the number of actual instructions executed
+since the processor was last reset</li>
+<li><strong>Load stall count</strong> - 0xFF02: the number of cycles lost to load-use
+stalls (that is, the number of cycles in which zero instructions
+executed because of a load-use stall)</li>
+<li><strong>Branch stall count</strong> - 0xFF03: the number of cycles lost to branch
+mis-predictions and/or stalls (that is, the number of cycles in which
+zero instructions executed because of a branch misprediction)</li>
+</ul>
+<p>The cycle count is incremented every cycle.  For the single-issue
+pipeline, every cycle one (and only one) of the instruction count, load
+stall, or branch stall counters is incremented.  As such, the sum of
+these three registers should be equal to the cycle count.</p>
+<p>For the dual-issue processor, only one of the instruction count, load
+stall, or branch stall counters is increased, but the instruction count
+register may sometimes be incremented by two (for cycles in which two
+instructions execute).  As such, the sum of these three registers will
+be greater than or equal to the cycle count.</p>
+<p>Your processor should update The performance counters during the
+writeback stage of the pipeline.  The performance counters should count
+an actual "NOOP" instruction as an instruction being executed.  That is,
+it isn't either a branch stall or a load stall cycle.</p>
+<p>The current value of these counters is determined by using a LD or LDR
+instruction to access them.  For simplicity, stores to these locations do not
+change the value of the registers, but stores may still update the contents of
+memory (it doesn't really matter, as anytime you read from these locations, it
+will use the value in the counter and not the value in the memory).  Basically,
+these counters can be reset to zero only when the entire system is reset.</p>
+</div>
+</div>
+<div class="section" id="multi-phased-implementation">
+<h1><a name="multi-phased-implementation">Multi-Phased Implementation</a></h1>
+<p>To give you some mid-project milestones, this project is broken into
+multiple phases.  This phased implementation is just a suggestion and
+isn't required to be followed exactly.</p>
+<div class="section" id="phase-a">
+<h2><a name="phase-a">Phase A</a></h2>
+<p>Build up the basic pipeline in two steps:</p>
+<ol class="arabic simple">
+<li>Create a non-bypassed pipeline and confirm that it can execute simple
+sequences of instructions that don't require bypassing or stalling
+(for example, if multiple no-ops are placed after each instruction).</li>
+<li>Create a fully-bypassed pipeline, and make sure that all code you test has an
+explicit no-operation instruction after every load and two no-operations
+after every branch instruction.</li>
+</ol>
+</div>
+<div class="section" id="phase-b">
+<h2><a name="phase-b">Phase B</a></h2>
+<p>Next, extend the fully-bypassed pipeline with:</p>
+<ol class="upperalpha simple">
+<li><strong>Load stalling</strong>: stall <strong>all</strong> instructions following a load instruction.
+This is simpler than detecting an actual dependent operation, but it is
+still correct (just slower than it should be).</li>
+<li><strong>Branch stalling</strong>: instead of implementing speculative execution for
+branches and the branch predictor, initially stall the pipeline by inserting
+two no-operation instructions after every branch instruction.  Basically,
+during the decode stage, if there is a branch in the execute or memory
+stages, insert a no-operation down the pipeline.</li>
+</ol>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">After Phase A &amp; B, you should still have a 100% functional processor
+for the first demo, but it will have a worse CPI than your final
+design.</p>
+</div>
+</div>
+<div class="section" id="phase-c">
+<h2><a name="phase-c">Phase C</a></h2>
+<p>The next phase is to stall only dependent operations following a load
+and implement the branch prediction and related logic.  When
+implementing the branches, you may want to first always predict branches
+as "not taken" (always predict PC+1) to test the basic workings of your
+pipeline.  Once you have that working you can implement the actual
+predictor described above.  In fact, the project writeup asks you to
+compare the performance of a simple "not taken" with the more accurate
+branch predictors, so you'll want to be able to do both.  You'll also
+want to create your own enhanced branch predictors to improve the CPI of
+the benchmark suite programs.</p>
+</div>
+<div class="section" id="phase-d">
+<h2><a name="phase-d">Phase D</a></h2>
+<p>Extend the pipeline to allow it to achieve an IPC of greater than 1 (CPI
+&lt; 1) on some of the benchmark suite programs.  It is up to you to
+design, document, and implement your dual-issue pipeline.  For later
+analysis, you're going to want to have a switch that can disable/enable
+the dual-issue logic, allowing you to compare the performance of the two
+designs.</p>
+<p>A set of skeleton files containing dual-ported memory and device modules 
+has been provided for you <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/p37x_processor_ss_skeleton.zip">here</a>. Please see the contained files for a
+description of how to use the new modules.</p>
+</div>
+</div>
+<div class="section" id="testing">
+<h1><a name="testing">Testing</a></h1>
+<p>Please see the lab 3 <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/lab3-testbench.html">testbench</a> page for a file that can be used to test
+the <em>functional correctness</em> of your pipelined processor.</p>
+<p>In addition to testing functional correctness, you may also want some
+sort of plan for testing <em>timing correctness</em>.  That is, if you stall
+when you should not or incorrectly update the branch predictor, your
+processor will correctly execute, but still isn't fully "correct".
+Closer to the final demos we'll give you some programs that will test
+some of the various timing aspects of your pipeline, but you'll want to
+do your own testing of the timing issues of the pipeline.</p>
+</div>
+<div class="section" id="verilog-restrictions">
+<h1><a name="verilog-restrictions">Verilog Restrictions</a></h1>
+<p>You can use the same subset of Verilog as in <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab2/">lab2</a>.  In addition, you
+may need to modify the behavioral testbench code to test your processor.
+Ask a TA or post on the forums if you have any questions about the
+testbench code.</p>
+</div>
+<div class="section" id="coding-tips-and-style-suggestions">
+<h1><a name="coding-tips-and-style-suggestions">Coding Tips and Style Suggestions</a></h1>
+<ul class="simple">
+<li><strong>Decode only once</strong>: Use the "decode" stage for decoding all of the signals
+in one place.  After you've decoded the instruction, you shouldn't need the
+opcode later in pipeline.  That is, you shouldn't be constantly re-decoding
+the opcode in each stage.</li>
+<li><strong>Register identifiers</strong>: Several places in the design, you'll have
+instructions that either (1) don't write a register value (for
+example, stores) or (2) don't read both input registers (for example,
+loads).  You might consider encoding these cases using an explicit
+"valid" bit for each 3-bit register specifier.  Doing so could
+dramatically simplify your bypass and stall logic.</li>
+<li><strong>Modularize</strong>: Try to make your design as modular as possible.  This task is
+actually harder than it sounds as several pipeline components are accessed in
+multiple stages (for example, it really isn't easy to make each stage its own
+Verilog module).  However, you really want to avoid the "main" datapath file
+from becoming one gargantuan mess of code, so break things up and modularize
+when you can.</li>
+<li><strong>Good signal names and comments</strong>: using well-named signals and
+well-documented code will help you and your partner understand each other's
+code.  Plus, this code is complicated enough and you'll be working on it over
+several weeks, so the comments really will pay off.</li>
+</ul>
+</div>
+<div class="section" id="demos">
+<h1><a name="demos">Demos</a></h1>
+<p>You'll have both a "preliminary demo" and a "final demo":</p>
+<ul class="simple">
+<li><strong>Preliminary demo</strong>: You need to demonstrate that at least phase A &amp; B
+(fully-functional, but over-stalling some instructions) of your design is
+working.  The performance counters need <em>not</em> be working at this stage of the
+design.  You should use whatever testing environment you've set up to
+convince us that the systems works both in simulation and on the FGPA board.</li>
+<li><strong>Final demo</strong>: You need to demonstrate the fully-working design.
+We'll give you some additional testing programs that will test both
+the functional <em>and</em> timing correctness of your design.  We'll also
+record the CPIs of the benchmark suite programs we gave you.</li>
+</ul>
+<p>All group members should be present at the demos.  The TAs will ask you
+some questions about your design during both the demos.  All group
+members should understand the entire design well enough to be able to
+answer any such questions.</p>
+<div class="section" id="final-demo-specifics">
+<h2><a name="final-demo-specifics">Final Demo Specifics</a></h2>
+<p>We'll give you a number of test programs that are designed to test for
+tricky bypassing and stalling cases.  These programs will self-verify
+their correct execution and record the results of the performance
+counters.</p>
+<p>The final demo consists of reveal test cases in the <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/p37os-test.hex">p37os-test.hex</a> file. (the
+associated symbol table file is also available: <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/p37os-test.sym">p37os-test.sym</a>.  The .hex file
+§contains several tests for correctness that execute at system startup,
+recording a "P" for pass or "F" for failure of each test.  The program also
+spits out the performance counter readings for the program allow us to verify
+your stalling, flushing, and branch predictor are working correctly.  We'll
+also run the various game programs options from the menu.</p>
+<blockquote>
+</blockquote>
+<p>Finally, in the <a class="reference" href="https://www.cis.upenn.edu/~milom/cse372-Spring07/lab3/p37os-test.hex">p37os-test.hex</a> input, the menu contains a new "benchmarks"
+menu choice.  When run, this program prints out the IPC (instruction per
+cycle).  Remember, a higher IPC is better.  The TAs will record the IPCs you
+obtained to determine that your branch predictor is significantly better and/or
+your superscalar processor optains an IPC of higher than one on the expected
+benchmarks.</p>
+<p>You're free to experiment with the tests, disassemble the hex file (by loading
+it into the simulator), or whatever.</p>
+<!-- The switches on the expansion board determine which test will be run each
+time (set the switches to binary values from zero to 12).  If the test
+passes, the low-order 4 expansion LEDs are lit.  Otherwise, a single LED lit
+signifies a failure.  You'll need to re-download the bitfile to re-run the
+test (by setting the switches differently first). You can also get the
+assembly source for this input file: lab3_testcases.asm_. -->
+<!-- We're also going to be recording the output of the performance
+counters of each of the tests, and grading the "performance"
+correctness of your design based on the performance counters.  The
+expansion switches also determine which of the performance counter
+results are displayed on the seven-segment display.  The low-order 4
+switches control, from left to right: insn count, cycle count,
+load-use stall cycles, and branch mispredict stall cycles.  Without
+any other combination of switches, the stall cycle count (cycle
+count - insn count) is displayed. -->
+</div>
+</div>
+<div class="section" id="what-to-turn-in">
+<h1><a name="what-to-turn-in">What to Turn In</a></h1>
+<p><strong>Design Document</strong>: You'll turn in a design document draft as specific above.</p>
+<p><strong>Final Writeup</strong>: The final writeup should include:</p>
+<ol class="arabic">
+<li><p class="first"><strong>Design update and retrospective</strong>.  Write a "design retrospective",
+focusing on what you learned during the design that you wish you
+would have known when you began the implementation.  Even if you
+scored well on your initial design document, you'll probably have
+uncovered a lot of additional information in your final lab writeup.
+In the end, how did you actually implemented bypassing and stalling?
+How do the performance counters work?  Etc.</p>
+<p>Basically, describe how your design changed and evolved over time,
+what parts you left out of the design document, which parts you got
+wrong, and assess the effectiveness of your approach to testing and
+debugging your implementation.  This shouldn't (just) be a narrative
+of what when wrong; instead, it should be a deep analysis of your
+original design.  You also might want to include things that, in
+retrospect, you wish you could go a month back in time and tell
+yourself concerning the lab.</p>
+</li>
+<li><p class="first"><strong>CPI analysis</strong>: Depending on what tier of the project you
+completed, you'll have up to four different performance points to
+consider: (1) single-issue pipeline with "predict not taken", (2)
+pipeline with simple single-entry branch predictor, (3) the pipeline
+with your custom predictor, and (4) your dual-issue pipeline with
+your custom predictor.  For each of the programs in the benchmark
+suite, record the CPI for each of these processor configurations you
+implemented (a table and/or graph would work best to display the
+data).  For each benchmark, briefly describe and explain the
+differences between the various configurations, commenting on the
+relative importance of the enhancements (especially relative to what
+the program does).  Did your custom branch predictor significantly
+increase performance?  When does the dual-issue design help the most?
+Using the results from the performance counters, how much faster
+would these programs run if there was a perfect branch predictor?
+Approximately how much faster would the design be with a zero-cycle
+load-use penalty?</p>
+</li>
+<li><p class="first"><strong>Verilog code</strong>. As before, your Verilog code should be well-formatted,
+easy to understand, and include comments where appropriate.  Some part of
+the project grade will be dependent on the style and readability of your
+Verilog, including formatting, comments, good signal names, and proper use
+of hierarchy.</p>
+</li>
+<li><p class="first">Answer the following questions:</p>
+<ul class="simple">
+<li>What problems, if any, did you encounter while doing this lab?</li>
+<li>How many hours did it take you to complete this assignment (total
+for entire group)?</li>
+<li>On a scale of 1 (least) to 5 (most), how difficult was this assignment?</li>
+</ul>
+</li>
+<li><p class="first">Finally, to encourage equal contribution by all group members, each
+group member should send me (Prof. Martin) an e-mail describing the
+contribution of each member of your group.  That is, for each group
+member (including yourself), give a percentage.  You're also free to
+give a short paragraph for each group member describing their role
+and efforts on the project.  The sum of the percentages must add up
+to 100%.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="addendum">
+<h1><a name="addendum">Addendum</a></h1>
+<ul class="simple">
+<li>[Apr 22] Added final testing .hex file</li>
+<li>[Apr 5] Added link to superscalar skeleton files.</li>
+<li>[Apr 4] Updated "Testing" section with pipeline testbench information.</li>
+</ul>
+</div>
+</div>
+<div class="footer">
+<hr class="footer">
+Generated on: 2007-04-23 05:02 UTC.
+
+</div>
+
+
+</body></html>

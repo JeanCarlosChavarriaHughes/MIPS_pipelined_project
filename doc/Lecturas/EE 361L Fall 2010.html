@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- saved from url=(0055)http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/lab5.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <title>EE 361L Fall 2010</title>
+<style type="text/css"></style></head>
+<body style="background-color: white;">
+<h1>EE 361L <br>
+</h1>
+<h1>Lab 5 Final Project<br>
+</h1>
+Update:&nbsp; November 9, 2010<br>
+
+
+<h2>Deadlines</h2>
+<ul>
+  <li>December 7, 2010 TUESDAY to complete the project and demonstrate
+to the TA.<br>
+  </li>
+  <li>Lab report submission deadline to be determined.<br>
+  </li>
+</ul>
+<h2>Instructions</h2>
+<p><span style="font-weight: bold;">You will build the five-stage
+pipelined MIPSL
+processor in verilog, which is a 16-bit version of the pipelined
+MIPS described in the lectures and textbook (Chapter 4).&nbsp; It has
+the same instruction set as the single cycle MIPS-L
+of Homework 9.&nbsp; The components such as the ALU is the same as
+in Homework 9.&nbsp; Note that all arithmetic and logic operations are
+done in the ALU with the exception of sign extension,
+shifting, and address addition (for branch address calculation).&nbsp;
+Your computer will eventually implement all the instruction of the
+MIPS-L of Homework 9 except the j, jal and jr instructions.<br>
+</span></p>
+<p><span style="font-weight: bold;">The are two parts to this project
+that leads to 5 subprojects.&nbsp; (Note that the subprojects are a
+continuum of tasks for each Part.&nbsp; Having subprojects makes it
+clearer to assign grade points.)<br>
+</span></p>
+<h3><span style="font-weight: bold;">Information:<br>
+</span></h3>
+<ul>
+  <li><a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/EE361L-PMIPSL.pdf">Description of the
+PMIPS-L0 and PMIPS-L processors</a>.&nbsp; 
+  </li>
+</ul>
+<p><span style="font-weight: bold;"></span></p>
+<p><span style="font-weight: bold;">Part 1:&nbsp; </span>Implement
+PMIPS-L0.&nbsp; This is a simplified version of the pipelined
+MIPS-L.&nbsp; It has five stages of pipelined datapath but does not
+allow instructions to be pipelined.&nbsp; In other words, only one
+instruction is processed through the computer at a time.&nbsp; This
+means that the processor will have bubbles in it as well as stalls for
+instruction fetching.<br>
+</p>
+<p><span style="font-weight: bold;">Subproject 0</span>:&nbsp; For this
+subproject, you can download verilog implementations of components of
+the computer:&nbsp; data memory and IO, register file, multiplexers
+(2:1 and 4:1), and ALU.&nbsp; <a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/EE361L-Subproject0.zip">Here is
+the download in a zipped folder</a>.&nbsp; The folder includes the
+verilog modules in the MIPS-Parts.V file.&nbsp; There are also three
+testbenches to test the modules, and an output trace file (word
+doc).&nbsp; There is also a instruction memory file IM1.V.&nbsp; This
+will be used in Subproject 1.&nbsp; Notice it is a simple program that
+multiplies two numbers.&nbsp; For this subproject, look over the
+modules and test them using the testbenches.&nbsp; Also read the
+description of PMIPS-L0 and PMIPS-L (under "Information" above).<br>
+<span style="font-weight: bold;"></span></p>
+<p><span style="font-weight: bold;">Subproject 1:&nbsp; </span>Implement
+the PMIPS-L0 in verilog to execute the following instructions:&nbsp;
+addi, R-type, and beq.&nbsp; Demonstrate your verilog code using
+veriwell.&nbsp; It will run a simple program which multiplies two
+numbers.&nbsp; Downloads will be ready November 4.</p>
+<ul>
+  <li><a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/EE361LControl.zip">Download for control modules (zipped
+file)</a>:&nbsp; This has modules for a controller and
+ALUcontrol.&nbsp; The controller is incomplete and the ALUcontrol
+hasn't been tested and may be buggy.&nbsp; There is a README file which
+you should read first.</li>
+  <li><a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/EE361LPMIPSL0.zip">Download for PMIPSL0 (zipped file)</a>:&nbsp;
+This has an incomplete version of PMIPSL0 and a testbench.</li>
+  <li><a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/Subproject1.zip">Download for Subproject1 (zipped file)</a>.&nbsp;
+There is a simple program in file IM1.V of multiplying two
+numbers.&nbsp; It also has a testbench and a pdf file which discusses
+implementation.&nbsp; <span style="font-weight: bold; color: rgb(204, 0, 0);">Demonstrate to the
+TA for credi</span>t.<br>
+  </li>
+</ul>
+<p><span style="font-weight: bold;">Subproject 2:&nbsp; </span>Implement
+the PMIPS-L0 in verilog to execute the instructions in Subproject 1 as
+well as lw, and sw.&nbsp; Demonstrate your verilog code using
+veriwell. <br>
+</p>
+<ul>
+  <li><a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/Subproject2.zip">Download for Subproject2 (zipped file)</a>.&nbsp;
+    <span style="font-weight: bold; color: rgb(204, 0, 0);">Demonstrate
+to the TA for credit.</span><br>
+  </li>
+</ul>
+<p><span style="font-weight: bold;">Subproject 3:&nbsp; </span>Implement
+the PMIPS-L0 described in Subproject 2 on the FPGA of the Digilent
+Basys&nbsp; Board.&nbsp; <br>
+</p>
+<ul>
+  <li><a href="http://ee.hawaii.edu/~sasaki/EE361/Fall12/Lab/Subproject3.zip">Download for Subproject3 (zipped file)</a>.&nbsp;
+    <span style="font-weight: bold; color: rgb(204, 0, 0);">Demonstrate
+to the TA for credit</span>.<br>
+  </li>
+</ul>
+<p><span style="font-weight: bold;">Part 2:&nbsp; </span>Implement the
+pipelined MIPS-L, which we will refer to as PMIPS-L.&nbsp; It has five
+stage of pipelined datapath.&nbsp; This processor will have simple
+branch-untaken branch prediction, so it will have the ability to flush
+the pipeline.&nbsp; It will also check consecutive instructions to
+determine when it can insert bubbles.<br>
+</p>
+<p><span style="font-weight: bold;">Subproject 4</span>:&nbsp;
+Implement the PMIPS-L in verilog.&nbsp; Demonstrate your verilog code
+using veriwell by having your computer run program IM1.V from
+Subproject 1.<br>
+</p>
+<p><span style="font-weight: bold;">Subproject 5:</span>&nbsp;
+Implement the PMIPS-L in verilog and on the FPGA of the Digilent Basys
+Board. Have your computer run program IM3.V from Subproject 3.<br>
+<span style="font-weight: bold;"></span></p>
+<ul>
+</ul>
+<span style="font-weight: bold;"></span><span style="font-weight: bold; color: rgb(0, 0, 0);"></span><br>
+<span style="text-decoration: underline;"></span>
+<h2>Grading<br>
+</h2>
+The total points for this lab is 40.&nbsp; <br>
+<ul>
+  <li><span style="text-decoration: underline;">Writing Style</span>:&nbsp;
+20 points is for writing style of the written report</li>
+  <li><span style="text-decoration: underline;">MIPS-L Implementation</span>:&nbsp;
+20 points depends on the capabilities of
+the multicycle MIPS-L you implement in verilog.&nbsp; You must
+demonstrate
+to your TA that you have completed your subprojects.<br>
+  </li>
+</ul>
+<div style="margin-left: 40px;">Here are the points you receive:<br>
+<ul>
+  <li>Subproject 1 = 14 points</li>
+  <li>Subprojects 1-2 = 16 points</li>
+  <li>Subprojects 1-3 = 18 points</li>
+  <li>Subprojects 1-4 = 20 points</li>
+  <li>Subprojects 1-5 = 20 points + 4 bonus points<br>
+  </li>
+</ul>
+</div>
+<br>
+<br>
+
+
+</body></html>
