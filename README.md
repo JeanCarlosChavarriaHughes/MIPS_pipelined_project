@@ -22,12 +22,12 @@ La sintaxis para ejecutar las pruebas es la siguiente:
 
 Reemplazando *<Prueba_a_realizar>* con:
 	
-..* `Decoder`, si se quiere ejecutar la prueba al Instruction Decoder, encargado de decodificar todas las instrucciones que recibe.
-..* `ALU_all`, si se quiere ejecutar la prueba a los módulos ALU y ALU control, encargados de realizar los cálculos aritméticos.
-..* `Ram_all`, si se quiere ejecutar la prueba a la memoria RAM.
-..* `Forward`, si se quiere ejecutar la prueba al módulo encargado de controlar los forwards.
-..* `BTaken`, si se quiere ejecutar la prueba al módulo encargado de definir si los branches son tomados o no
-..* `Cpu`, si se quiere ejecutar la prueba al CPU, que incluye todos los módulos implementados y conectados adecuadamente.
+* `Decoder`, si se quiere ejecutar la prueba al Instruction Decoder, encargado de decodificar todas las instrucciones que recibe.
+* `ALU_all`, si se quiere ejecutar la prueba a los módulos ALU y ALU control, encargados de realizar los cálculos aritméticos.
+* `Ram_all`, si se quiere ejecutar la prueba a la memoria RAM.
+* `Forward`, si se quiere ejecutar la prueba al módulo encargado de controlar los forwards.
+* `BTaken`, si se quiere ejecutar la prueba al módulo encargado de definir si los branches son tomados o no
+* `Cpu`, si se quiere ejecutar la prueba al CPU, que incluye todos los módulos implementados y conectados adecuadamente.
 
 El documento [Reporte](./Reporte.pdf) se encuentra el reporte que incluye todas las especificaciones del diseño realizado, así como de las diferentes pruebas que se realizaron para asegurar el correcto funcionamiento del procesador.
 
